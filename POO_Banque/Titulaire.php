@@ -4,17 +4,17 @@ class Titulaire {
 
     private string $nom ;
     private string $prenom ;
-    private dateTime $dateDeNaissance ;
+    private \DateTime $dateDeNaissance ;
     private string $ville ;
-    private array $ensembleComptes ; 
+    private array $comptes ; 
     
     public function __construct(string $nom, string $prenom, string $dateDeNaissance, string $ville ) {
         $this->nom = $nom ;
         $this->prenom = $prenom ;
-        $this->dateDeNaissance = new dateTime($dateDeNaissance) ;
+        $this->dateDeNaissance = new \DateTime($dateDeNaissance) ;
         $this->ville = $ville ;
 
-        $this->ensembleComptes = [] ;
+        $this->comptes = [] ;
     }
     
     // getter
@@ -58,76 +58,76 @@ class Titulaire {
     {
         $this->ville = $ville;
     }
-    
-    //function addCompte() et on lui donne le param Compte en va mettre dans le tableau ensembleComptes le param
 
+    // toString
     public function __toString()
     {
-        return " Titulaire : ".$this->getPrenom()." ".$this->getPrenom()."<br> 
-        ".$this->showCompte();
+        return var_dump($this->comptes);
     }
+
     // méthodes
-
-    public function addCompte(Compte $Objetcompte)
+    public function addCompte(Compte $compteObjet)
     {
-        $this->ensembleComptes[] = $Objetcompte;
+        $this->comptes[] = $compteObjet;
     }
-
 
     public function showCompte()
     {
-        echo "Comptes : " ;
-        foreach($this->ensembleComptes as $compte) {
-
-            echo $compte->getLibelle()." ";
+        foreach($this->comptes as $compte) {
+            echo $compte->getLibelle()." " ;
         }
     }
-
+    
     public function getAge()
     {
-        $dateNow = new DateTime("now");
+        $dateNow = new \DateTime("now");
         $dateTimeDeNaissance = $this->getDateDeNaissance();
-
+        
         $agePersonne = date_diff($dateTimeDeNaissance, $dateNow)->format("%Y ans");
-
+        
         return $agePersonne;
     }
-
-    // méthode Titulaire -> Compte
-
-    public function getSoldeAvecDevise(Compte $Objetcompte)
+    
+    public function getSoldeAvecDevise(Compte $compteObjet)
     {
-        return $Objetcompte->getSoldeInitial().$Objetcompte->getDeviseMonetaire() ;
+        return $compteObjet->getSoldeInitial().$compteObjet->getDeviseMonetaire() ;
     }
 
-    public function versementComptes(int $soldeVersement, Compte $compteCredite, Compte $compteDebite )
+    public function debiteCompte(int $solde, Compte $compteDebite)
     {
-        // $compteCredite = $compteCredite->ensembleComptes[1] ;
-        // $compteDebite = $this->ensembleComptes[1] ;
-        $soldeAdd = $compteCredite->getSoldeInitial() + $soldeVersement ;
-        $soldeSub = $compteDebite->getSoldeInitial() - $soldeVersement ;
-        $this->setSoldeInitial($soldeAdd) ;
-        echo "Vous avez fait un virement de ".$soldeVersement.$compteCredite->getDeviseMonetaire()." de votre ".debite." a ".credite."
-         votre balance pour votre".debite."est de : " etc.. pour credite;
-
-        return $soldeCredite.$this->getDeviseMonetaire()." sont crédités à votre compte" ;
+        $soldeSub = $compteDebite->getSoldeInitial() - $solde ;
+        // $soldeSub -= $compteDebite->getSoldeInitial() ;
+        $compteDebite->setSoldeInitial($soldeSub) ;
     }
 
-    // public function debiterCompte($soldeDebite, $compteDebite)
-    // {
-    //     $soldeSub = $ensembleComptes[0]->getSoldeInitial() - $soldeDebite ;
-    //     $this->setSoldeInitial($soldeSub) ;
-    //     return $soldeDebite.$this->getDeviseMonetaire()." sont débités de votre compte" ;
-    // }
+    public function crediteCompte(int $solde, Compte $compteCredite)
+    {
+        $soldeAdd = $compteCredite->getSoldeInitial() + $solde ;
+        $compteCredite->setSoldeInitial($soldeAdd) ;
+    }
 
+    public function versementComptes(int $solde, Compte $compteDebite, Compte $compteCredite )
+    {
+        $this->debiteCompte($solde, $compteDebite);
+        $this->crediteCompte($solde, $compteCredite);
+        
+        return "<p> ".$this->getPrenom()." ".$this->getNom()." a fait un virement de ".$solde.$compteDebite->getDeviseMonetaire()." de son
+        ".$compteDebite->getLibelle()." a son ".$compteCredite->getLibelle()." </p>";
+    }
 
+    public function getInfoTitulaire()
+    {
+    echo "Information titulaire : ".$this->getNom()." ".$this->getPrenom()." <br> ville : ".$this->getVille()." <br> age : ".$this->getAge()."<br> 
+    comptes : "; 
 
+    foreach($this->comptes as $compte) {
+        echo $compte->getLibelle()." , " ;
+    } ;
+    }
 
-    // public function __toString()
-    // {
-    //     return var_dump($this->ensembleComptes);
-    // }
+        
+    // public function getInfosCompte
 }
-
-
+    
+    
 ?>

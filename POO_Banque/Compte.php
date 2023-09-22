@@ -5,15 +5,15 @@ class Compte {
     private string $libelle ;
     private int $soldeInitial ;
     private string $deviseMonetaire ;
-    private Titulaire $titulaireUnique ;
+    private Titulaire $titulaire ;
 
-    public function __construct(string $libelle, int $soldeInitial, string $deviseMonetaire, Titulaire $titulaireUnique) {
+    public function __construct(string $libelle, int $soldeInitial, string $deviseMonetaire, Titulaire $titulaire) {
         $this->libelle = $libelle ;
         $this->soldeInitial = $soldeInitial ;
         $this->deviseMonetaire = $deviseMonetaire ;
-        $this->titulaireUnique = $titulaireUnique ;
+        $this->titulaire = $titulaire ;
         //un addCompte($this) pour le titulaire
-        $this->titulaireUnique->addCompte($this) ;
+        $this->titulaire->addCompte($this) ;
     }
 
     // getter
@@ -32,9 +32,9 @@ class Compte {
         return $this->deviseMonetaire;
     }
 
-    public function getTitulaireUnique()
+    public function getTitulaire()
     {
-        return $this->titulaireUnique;
+        return $this->titulaire;
     }
 
     // setter
@@ -42,33 +42,35 @@ class Compte {
     {
         $this->libelle = $libelle;
     }
-
+    
     public function setSoldeInitial($soldeInitial)
     {
         $this->soldeInitial = $soldeInitial;
     }
-
+    
     public function setdeviseMonetaire($deviseMonetaire)
     {
         $this->deviseMonetaire = $deviseMonetaire;
     }
-
-    public function setTitulaireUnique($titulaireUnique)
+    
+    public function setTitulaire($titulaire)
     {
-        $this->titulaireUnique = $titulaireUnique;
+        $this->titulaire = $titulaire;
     }
 
-    // public function __toString()
-    // {
-    //     return "<p> ".$this->getLibelle()." : </p> 
-    //     <p> Solde : ".$this->getSoldeAvecDevise()." </p>
-    //     <p> Titulaire : ".$this->getTitulaireUnique().". </p>" ;
-    // }
-
+    // toString
+    public function __toString()
+    {
+        return $this->getTitulaire() ;
+    }
+    
     // méthodes
-
+    public function getInfosCompte()
+    {
+        return "Information compte bancaire : ".$this->getLibelle()." <br> appartient à : ".$this->getTitulaire()->getNom()." ".$this->getTitulaire()->getPrenom()."<br> 
+        solde : ".$this->getSoldeInitial().$this->getDeviseMonetaire() ;
+    }
 
 }
-
 
 ?>
